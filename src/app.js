@@ -1,6 +1,6 @@
-"use strict"
+//"use strict"
 
-require("dotenv").config();
+require("dotenv").config(); 
 
 const { Client } = require("pg");
 
@@ -8,7 +8,7 @@ let client = new Client()
 client.connect()
 
 
-console.log(process.env.PGHOST);
+console.log(process.env.PGUSER);
 
 //creating database
 
@@ -19,10 +19,10 @@ const createdb = async () =>{
 			`CREATE DATABASE visitorlog;`
         )
 		console.log(query)
-		await client.end()
+	//	await client.end()
 	} catch(e) {
 		console.log(e);
-		await client.end()
+	//	await client.end()
 	}
 }
 // createdb();
@@ -33,7 +33,7 @@ const createTable = async () =>{
 	
 	try {
 		const query = await client.query(
-			`CREATE TABLE IF NOT EXISTS 
+			`CREATE TABLE   
 				visitors(
                     visitorID SERIAL NOT NULL,
                     visitorName varchar(50),
@@ -45,10 +45,10 @@ const createTable = async () =>{
                     PRIMARY KEY(visitorID));`
         )
 		console.log(query)
-		await client.end()
+	//	await client.end()
 	} catch(e) {
 		console.log(e);
-		await client.end()
+	//	await client.end()
 	}
 }
 
@@ -62,17 +62,18 @@ const displayAll  = async() =>{
 	try {
 		query = await client.query(text,values)
 		console.log(query.rows)
-		await client.end()
+		//await client.end()
 	} catch(e) {
 		console.log(e);
-		await client.end()
+	//	await client.end()
 	}
 }
-
+//displayAll();
 // Insert the content
 const addContent  = async() =>{
-	let text, values, query;
-	values = ['Kgaugelo', 27, '02/02/2020', '10:38', 'Portia', 'No comment']
+	let text, query;
+	//data = [visitorName,visitorAge,dateOfVisit,timeOfVisit,nameOfAssistant,comments];
+	let values = ['Kgaugelo', 27, '02/02/2020', '10:38', 'Portia', 'No comment']
 	text = `INSERT INTO 
 				visitors(
                     visitorName,
@@ -81,20 +82,23 @@ const addContent  = async() =>{
                     timeOfVisit,
                     nameOfAssistant,
                     comments) 
-				VALUES($1,$2, $3, $4, $5, $6) 
+					VALUES($1,$2,$3, $4, $5, $6) 
 				RETURNING *`
 	
-	
+
 	try {
 		query = await client.query(text,values)
-		console.log(query.rows)
-		await client.end()
+		return query.rows;
+	//	await client.end()
 	} catch(e) {
-		console.log(e);
-		await client.end()
+		console.log("ERROR",e);
+	}
+	finally{
+		//await client.end()
+		
 	}
 }
-//addContent();
+addContent();
 
 // delete visitor from list
 const deleteContent  = async() =>{
@@ -105,10 +109,10 @@ const deleteContent  = async() =>{
 	try {
 		query = await client.query(text,values)
 		console.log(query.rows)
-		await client.end()
+		//await client.end()
 	} catch(e) {
 		console.log(e);
-		await client.end()
+		//await client.end()
 	}
 }
 //deleteContent();
@@ -118,17 +122,17 @@ const deleteContent  = async() =>{
 const updateContent  = async() =>{
 	let text, values, query;
 	text = ` Update visitors
-   			 SET nameOfAssistant = 'Kgaugelo', comments = 'It is a nice building'
+   			 SET nameOfAssistant = 'Mpumelelo', comments = 'It is a nice building'
     		 WHERE visitorID = 1 `
 
 	
 	try {
 		query = await client.query(text,values)
 		console.log(query.rows)
-		await client.end()
+		//await client.end()
 	} catch(e) {
 		console.log(e);
-		await client.end()
+		//await client.end()
 	}
 }
 
@@ -142,10 +146,10 @@ const displayOneContent  = async() =>{
 	try {
 		query = await client.query(text,values)
 		console.log(query.rows)
-		await client.end()
+		//await client.end()
 	} catch(e) {
 		console.log(e);
-		await client.end()
+		//await client.end()
 	}
 }
 //displayOneContent();
@@ -158,10 +162,10 @@ const deleteall  = async() =>{
 	try {
 		query = await client.query(text,values)
 		console.log(query.rows)
-		await client.end()
+		//await client.end()
 	} catch(e) {
 		console.log(e);
-		await client.end()
+		//await client.end()
 	}
 }
 
